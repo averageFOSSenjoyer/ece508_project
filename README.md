@@ -1,0 +1,2 @@
+1. download `model.safetensors` from https://huggingface.co/Qwen/Qwen3-0.6B/blob/main/model.safetensors and place in model/
+2. run `RUST_LOG=info cargo run --release -- -t ./model/tokenizer.json -m ./model/model.safetensors -p hello`
