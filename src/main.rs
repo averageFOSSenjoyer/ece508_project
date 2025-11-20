@@ -6,7 +6,7 @@ include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 pub(crate) mod constants;
 pub(crate) mod tokenizer;
 
-use std::ffi::CString;
+use std::{ffi::CString, time::SystemTime};
 
 use anyhow::Result;
 use clap::Parser;
@@ -27,6 +27,8 @@ struct Args {
 
 fn main() -> Result<()> {
     env_logger::init();
+    let mut total_token_generated = 0;
+    let mut time_passed = 0.0;
 
     let args = Args::parse();
 
@@ -60,6 +62,7 @@ fn main() -> Result<()> {
             crate::copy_embedding(&mut weights as *mut Weights, &mut run_state as *mut RunState, token);
         }
 
+        let now = SystemTime::now();
         for l in 0..constants::NUM_HIDDEN_LAYERS {
             let layer = weights.transformer_blocks[l];
 
@@ -136,6 +139,9 @@ fn main() -> Result<()> {
         // 14. get logits
         let logits = unsafe { get_logits(&mut run_state as *mut RunState) };
 
+        time_passed += now.elapsed()?.as_secs_f64();
+        total_token_generated += 1;
+
         next_token_id = logits._inner.iter()
             .enumerate()
             .max_by(|(_, x), (_, y)| x.partial_cmp(y).unwrap())
@@ -151,6 +157,9 @@ fn main() -> Result<()> {
 
         pos += 1;
     }
+
+    println!("");
+    println!("token/s: {}", total_token_generated as f64 / time_passed);
 
     Ok(())
 }
