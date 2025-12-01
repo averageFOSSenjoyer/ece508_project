@@ -54,8 +54,10 @@ fn main() {
         .file("./c_src/ops.cu")
         .flag("-I/usr/local/cuda-12.8/targets/x86_64-linux/include/")
         .flag("-L/usr/local/cuda/targets/x86_64-linux/lib")
-        .flag("-ccbin=g++-12")
+        // .flag("-ccbin=g++-12")
         .flag("-std=c++17")
+        .flag("-gencode")
+        .flag("arch=compute_80,code=sm_80")
         .compile("lib");
 
     let bindings = bindgen::Builder::default()
