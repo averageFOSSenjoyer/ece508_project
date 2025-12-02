@@ -30,13 +30,26 @@
 //   "vocab_size": 151936
 // }
 
-pub(crate) const SEQ_LEN: usize = 8192;
+// qwen 0.6b
+// pub(crate) const SEQ_LEN: usize = 8192;
+// pub(crate) const HEAD_DIM: usize = 128;
+// pub(crate) const HIDDEN_SIZE: usize = 1024;
+// pub(crate) const NUM_ATTN_HEADS: usize = 16;
+// pub(crate) const NUM_HIDDEN_LAYERS: usize = 28;
+// pub(crate) const NUM_KV_HEADS: usize = 8;
+// pub(crate) const INTERMEDIATE_SIZE: usize = 3072;
+// pub(crate) const VOCAB_SIZE: usize = 151936;
+
+
+// qwen 8b
+pub(crate) const SEQ_LEN: usize = 1024;
 pub(crate) const HEAD_DIM: usize = 128;
-pub(crate) const HIDDEN_SIZE: usize = 1024;
-pub(crate) const NUM_ATTN_HEADS: usize = 16;
-pub(crate) const NUM_HIDDEN_LAYERS: usize = 28;
+pub(crate) const HIDDEN_SIZE: usize = 4096;
+pub(crate) const NUM_ATTN_HEADS: usize = 32;
+pub(crate) const NUM_HIDDEN_LAYERS: usize = 36;
 pub(crate) const NUM_KV_HEADS: usize = 8;
-pub(crate) const INTERMEDIATE_SIZE: usize = 3072;
+pub(crate) const INTERMEDIATE_SIZE: usize = 12288;
 pub(crate) const VOCAB_SIZE: usize = 151936;
+
 pub(crate) const KV_DIM: usize = NUM_KV_HEADS * HEAD_DIM;
 pub(crate) const Q_DIM: usize = NUM_ATTN_HEADS * HEAD_DIM;

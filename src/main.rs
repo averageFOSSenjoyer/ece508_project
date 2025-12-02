@@ -197,8 +197,8 @@ fn main() -> Result<()> {
                 .map(|(i, _)| i)
                 .unwrap();
 
-            tx.send((next_token_id, pos))?;
-            if next_token_id == 151645 {
+            tx.try_send((next_token_id, pos))?;
+            if next_token_id == 151645 || pos > constants::SEQ_LEN {
                 break;
             }
 
@@ -208,11 +208,11 @@ fn main() -> Result<()> {
         Ok((time_map, total_token_generated))
     });
 
-
+    let now = SystemTime::now();
     loop {
         let (next_token_id, pos) = rx.recv()?;
         let next_token = tokenizer.decode(vec![next_token_id])?;
-        if next_token_id == 151645 {
+        if next_token_id == 151645 || pos > constants::SEQ_LEN  {
             break;
         }
         if pos > prompt_token_len {
@@ -221,6 +221,7 @@ fn main() -> Result<()> {
         }
     }
     println!("");
+    let o_now = now.elapsed().unwrap().as_micros();
 
     let (time_map, total_token_generated) = th.join().unwrap()?;
     let total_time_passed = time_map.iter().map(|(_, v)| *v).collect::<Vec<u128>>().into_iter().sum::<u128>();
@@ -228,7 +229,8 @@ fn main() -> Result<()> {
     for (k, v) in time_map {
         summary_time_map.insert(k, v as f64 / total_time_passed as f64);
     }
-    info!("token/s: {}", total_token_generated as f64 / (total_time_passed as f64 / 1e6));
+    info!("(strict) token/s: {}", total_token_generated as f64 / (total_time_passed as f64 / 1e6));
+    info!("(loose) token/s: {}", total_token_generated as f64 / (o_now as f64 / 1e6));
     info!("summary_time_map: {:?}", summary_time_map);
     
     Ok(())

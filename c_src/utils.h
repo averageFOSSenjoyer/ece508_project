@@ -14,14 +14,27 @@
 #include <cuda_bf16.h>
 #include <cublas_v2.h>
 
-#define SEQ_LEN 8192
+#define SEQ_LEN 1024
+
+// qwen 0.6b
+// #define HEAD_DIM 128
+// #define HIDDEN_SIZE 1024
+// #define NUM_ATTN_HEADS 16
+// #define NUM_HIDDEN_LAYERS 28
+// #define NUM_KV_HEADS 8
+// #define INTERMEDIATE_SIZE 3072
+// #define VOCAB_SIZE 151936
+
+// qwen 8b
 #define HEAD_DIM 128
-#define HIDDEN_SIZE 1024
-#define NUM_ATTN_HEADS 16
-#define NUM_HIDDEN_LAYERS 28
+#define HIDDEN_SIZE 4096
+#define NUM_ATTN_HEADS 32
+#define NUM_HIDDEN_LAYERS 36
 #define NUM_KV_HEADS 8
-#define INTERMEDIATE_SIZE 3072
+#define INTERMEDIATE_SIZE 12288
 #define VOCAB_SIZE 151936
+
+
 #define Q_DIM (NUM_ATTN_HEADS * HEAD_DIM)
 #define KV_DIM (NUM_KV_HEADS * HEAD_DIM)
 
